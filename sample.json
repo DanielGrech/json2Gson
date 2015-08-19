@@ -7,7 +7,7 @@
     "number" : 742,
     "town" : "Springfield"
   },
-  "children": {
+  "children": [
     {
       "name" : "Bart Simpson"
     },
@@ -15,5 +15,5 @@
     {
       "name" : "Lisa Simpson"
     }
-  }
+  ]
 }

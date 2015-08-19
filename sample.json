@@ -1,0 +1,19 @@
+{
+  "id" : 123,
+  "name" : "Homer Simpson",
+  "current_fund" : 12.34,
+  "address" : {
+    "street" : "Evergreen Terrace",
+    "number" : 742,
+    "town" : "Springfield"
+  },
+  "children": {
+    {
+      "name" : "Bart Simpson"
+    },
+
+    {
+      "name" : "Lisa Simpson"
+    }
+  }
+}

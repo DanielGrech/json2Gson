@@ -63,6 +63,8 @@ def plural_to_singular(input):
     return input[:-3]
   elif input.endswith("s"):
     return input[:-1]
+  else:
+    return input
 
 def underscore_to_camelcase(input):
   return ''.join(word.title() if i else word for i, word in enumerate(input.split('_')))

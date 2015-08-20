@@ -2,6 +2,7 @@
 import sys
 import json
 import argparse
+from operator import attrgetter
 
 java_classes = []
 
@@ -11,9 +12,23 @@ class JavaClass:
     self.fields = []
 
   def __repr__(self):
+    self.fields.sort(JavaClass._field_order_cmp)
     fields = '\n\n\t'.join(str(f) for f in self.fields)
     getters = '\n\n\t'.join(self._generateGetter(f) for f in self.fields)
     return "public class %s {\n\n\t%s\n\n\t%s\n}" % (self.name, fields, getters)
+
+  @staticmethod
+  def _field_order_cmp(a, b):
+    if a.field_name == "id":
+      return 0 if b == "id" else -1
+    elif b.field_name == "id":
+      return 1
+    elif a.field_name.endswith("id"):
+      return 0 if b.field_name.endswith("id") else -1
+    elif b.field_name.endswith("id"):
+      return 1
+    else:
+      return cmp(a.field_name, b.field_name)
 
   def _generateGetter(self, field):
     retval = field.field_type

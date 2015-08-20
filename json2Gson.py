@@ -12,12 +12,12 @@ class JavaClass:
   def __repr__(self):
     fields = '\n\n\t'.join(str(f) for f in self.fields)
     getters = '\n\n\t'.join(self._generateGetter(f) for f in self.fields)
-    return "public class %s {\n\t%s\n\n\t%s\n}" % (self.name, fields, getters)
+    return "public class %s {\n\n\t%s\n\n\t%s\n}" % (self.name, fields, getters)
 
   def _generateGetter(self, field):
     retval = field.field_type
     prefix = "is" if retval == "boolean" else "get"
-    prop = field.field_name.title()
+    prop = field.field_name[:1].upper() + field.field_name[1:]
 
     return "public %s %s%s() {\n\t\treturn this.%s;\n\t}" % (retval, prefix, prop, field.field_name)
 
@@ -36,6 +36,9 @@ def plural_to_singular(input):
   elif input.endswith("s"):
     return input[:-1]
 
+def underscore_to_camelcase(input):
+  return ''.join(word.title() if i else word for i, word in enumerate(input.split('_')))
+
 def convert_type(input, generic="Object"):
   if input is str or input is unicode:
     return "String"
@@ -50,25 +53,25 @@ def convert_type(input, generic="Object"):
 
 def process(java_class, json_data):
   for key in json_data.keys():
+    variable_name = underscore_to_camelcase(key)
     data = json_data[key]
     t = type(data)
     if t is dict:
       new_java_class = JavaClass(key.title())
-      java_class.fields.append(JavaField(new_java_class.name, key, key))
+      java_class.fields.append(JavaField(new_java_class.name, key, variable_name))
       process(new_java_class, data)
     elif t is list:
       generic_type = plural_to_singular(key.title())
-      java_class.fields.append(JavaField(convert_type(t, generic_type), key, key))
+      java_class.fields.append(JavaField(convert_type(t, generic_type), key, variable_name))
 
       if len(data) > 0:
         new_java_class = JavaClass(generic_type)
         process(new_java_class, data[0])
     else:
-      java_class.fields.append(JavaField(convert_type(t), key, key))
+      java_class.fields.append(JavaField(convert_type(t), key, variable_name))
 
   java_classes.append(java_class)
 
-    # print key, type(json_data[key]), json_data[key]
 
 def std_in_to_json():
   json_str = ""

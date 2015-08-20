@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import sys
 import json
+import argparse
 
 java_classes = []
 
@@ -79,10 +80,19 @@ def std_in_to_json():
       json_str += line
   return json_str
 
-json_data = json.loads(std_in_to_json())
- 
-top_level_class = JavaClass("MyAwesomeClass")
-process(top_level_class, json_data)
+def main():
+  parser = argparse.ArgumentParser(description='Convert a sample json feed into Java classes for use with Gson')
+  parser.add_argument('--class_name', metavar='NAME', help='The name of the class for the top level Json object', default='MyAwesomeClass')
+  
+  args = parser.parse_args()
 
-for jc in java_classes:
-  print str(jc) + "\n\n"
+  json_data = json.loads(std_in_to_json())
+   
+  top_level_class = JavaClass(args.class_name)
+  process(top_level_class, json_data)
+
+  for jc in java_classes:
+    print str(jc) + "\n\n"
+
+if __name__ == '__main__':
+  main()

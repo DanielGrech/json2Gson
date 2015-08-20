@@ -22,4 +22,4 @@ optional arguments:
 
 Example:
 
-`cat sample_input.json | ./json2Gson.py --class_name=Person`
+`cat sample.json | ./json2Gson.py --class_name=Person`

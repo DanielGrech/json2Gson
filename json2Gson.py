@@ -41,6 +41,9 @@ class JavaClass:
       if prop.startswith("Is"):
         prop = field.field_name[:1].lower() + field.field_name[1:]
         prefix = ""
+      elif prop.startswith("Has"):
+        prop = field.field_name[:3].lower() + field.field_name[3:]
+        prefix = ""
       else:
         prefix = "is"
 

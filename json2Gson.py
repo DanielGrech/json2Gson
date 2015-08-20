@@ -13,8 +13,9 @@ class JavaClass:
 
   def __repr__(self):
     self.fields.sort(JavaClass._field_order_cmp)
+
     fields = '\n\n\t'.join(str(f) for f in self.fields)
-    getters = '\n\n\t'.join(self._generateGetter(f) for f in self.fields)
+    getters = '\n\n\t'.join(JavaClass._generateGetter(f) for f in self.fields)
     return "public class %s {\n\n\t%s\n\n\t%s\n}" % (self.name, fields, getters)
 
   @staticmethod
@@ -30,7 +31,8 @@ class JavaClass:
     else:
       return cmp(a.field_name, b.field_name)
 
-  def _generateGetter(self, field):
+  @staticmethod
+  def _generateGetter(field):
     retval = field.field_type
 
     prefix = "get"

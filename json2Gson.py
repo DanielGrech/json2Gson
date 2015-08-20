@@ -17,8 +17,15 @@ class JavaClass:
 
   def _generateGetter(self, field):
     retval = field.field_type
-    prefix = "is" if retval == "boolean" else "get"
+
+    prefix = "get"
     prop = field.field_name[:1].upper() + field.field_name[1:]
+    if retval == "boolean":
+      if prop.startswith("Is"):
+        prop = field.field_name[:1].lower() + field.field_name[1:]
+        prefix = ""
+      else:
+        prefix = "is"
 
     return "public %s %s%s() {\n\t\treturn this.%s;\n\t}" % (retval, prefix, prop, field.field_name)
 
@@ -47,6 +54,8 @@ def convert_type(input, generic="Object"):
     return "int"
   elif input is float:
     return "float"
+  elif input is bool:
+    return "boolean"
   elif input is list:
     return "List<%s>" % (generic)
   else:

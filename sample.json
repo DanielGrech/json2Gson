@@ -2,6 +2,8 @@
   "id" : 123,
   "name" : "Homer Simpson",
   "current_fund" : 12.34,
+  "is_parent" : true,
+  "eligible_for_benefits": false,
   "address" : {
     "street" : "Evergreen Terrace",
     "number" : 742,
